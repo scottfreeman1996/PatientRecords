@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, Response
 import json
-from settings import *
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
 
@@ -18,6 +19,7 @@ class Patient(db.Model):
     
     def __init__(self,params):
         self.name = params["name"]
+        self.gender = params["gender"]
         self.date_of_birth = params["date_of_birth"]
         self.area = params["area"]
         self.phone_no = params["phone_no"]
@@ -26,20 +28,22 @@ class Patient(db.Model):
 @app.route('/patients')
 def create_Patient():
     p = Patient({"name":"Test Patient","gender":"male","date_of_birth":"01/01/2010",
-                "area":"Leeds","phone_no":6789998212})
+                "area":"Leeds","phone_no":67})
     
-    db.session.(p)
+    db.session.add(p)
     db.session.commit()
 
     patients = Patient.query.all()
 
     for p in patients:
-        print("ID:",p.patient_id,"Name:",p.name,"Date of Birth:",p.date_of_birth,
+        print("ID:",p.patient_id,"Name:",p.name,"Gender:",p.gender, "Date of Birth:",p.date_of_birth,
             "Area:",p.area, "Phone Number:",p.phone_no)
 
 
 
 if __name__ == '__main__':
+    #db.create_all()
 
+    create_Patient()
     app.run(port=5000)
     pass
