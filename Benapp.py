@@ -15,7 +15,7 @@ class Report(db.Model):
     symptoms = db.Column(db.String(1000))
     date = db.Column(db.String(10))
     diagnosis = db.Column(db.String(50))
-    patient_id = db.Column(db.Integer)
+    patient_id = db.Column(db.Integer, db.ForeignKey('patient_id'),nullable=False)
 
 
 @app.route("/add-report/<int:patient_id>",methods=['POST'])
