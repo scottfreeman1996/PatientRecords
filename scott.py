@@ -10,6 +10,12 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/patient_records'
 db = SQLAlchemy(app)
 
+report_chart = db.Table('report_chart',
+            db.Column('patient_id', db.Integer, db.ForeignKey('patient_details.patient_id'),
+                primary_key=True),
+            db.Column('report_id', db.Integer, db.ForeignKey('reports.report_id'),
+                primary_key=True))
+
 class Patient(db.Model):
     __tablename__= "patient_details"
     patient_id= db.Column(db.Integer, primary_key = True)
@@ -18,6 +24,7 @@ class Patient(db.Model):
     date_of_birth = db.Column("date_of_birth", db.String(10))
     area = db.Column("area", db.String(20))
     phone_no = db.Column("phone_no", db.Integer)
+    reports = db.relationship('Report',backref='patient',lazy=True)
     
     def __init__(self,params):
         self.name = params["name"]
