@@ -1,5 +1,6 @@
-from flask.app import Flask
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import jsonpickle
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/patient_records'
@@ -14,23 +15,35 @@ class Report(db.Model):
     symptoms = db.Column(db.String(1000))
     date = db.Column(db.String(10))
     diagnosis = db.Column(db.String(50))
-    patient_id = (db.Integer)
+    patient_id = db.Column(db.Integer)
 
     def __init__(self,params):
-        self.report_id = params["report_id"]
         self.symptoms = params["symptoms"]
-        # self.date = params["date"]
-        # self.diagnosis = params["diagnosis"]
-        # self.diagnosis = params["patient_id"]
+        self.date = params["date"]
+        self.diagnosis = params["diagnosis"]
+        self.patient_id = params["patient_id"]
 
-def add_report(params):
-    r = Report(params)
+@app.route("/add-report/<int:patient_id>",methods=['POST'])
+def add_report(patient_id):
+    request_data = request.get_json()
+    request_data["patient_id"] = int(patient_id)
+    r = Report(request_data)
     db.session.add(r)
     db.session.commit()
+    return jsonify(request_data)
+
+@app.route("/get-reports/<int:patient_id>")
+def get_reports(patient_id):
+    report_list = db.session.query(Report).filter_by(patient_id=int(patient_id)).all()
+    display_report_list = []
+    for report in report_list:
+        display_report_list.append({"report_id":report.report_id,"symptoms":report.symptoms,"date":report.date,"diagnosis":report.diagnosis,"patient_id":report.patient_id})
+    return jsonpickle.encode(display_report_list)
+    # return Report.query.filter_by("patient_id"==int(patient_id))
 
 db.create_all()
 
-r = {"report_id":10,"symptoms":"my body hurt sooo bad:("}
-add_report(r)
+# r = {"symptoms":"RAH IT HURTS","date":"3/4/29","diagnosis":"bubonic plague"}
+# add_report(r,78)
 
 app.run(port=5000)
