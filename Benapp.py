@@ -17,17 +17,12 @@ class Report(db.Model):
     diagnosis = db.Column(db.String(50))
     patient_id = db.Column(db.Integer)
 
-    def __init__(self,params):
-        self.symptoms = params["symptoms"]
-        self.date = params["date"]
-        self.diagnosis = params["diagnosis"]
-        self.patient_id = params["patient_id"]
 
 @app.route("/add-report/<int:patient_id>",methods=['POST'])
 def add_report(patient_id):
     request_data = request.get_json()
     request_data["patient_id"] = int(patient_id)
-    r = Report(request_data)
+    r = Report(**request_data)
     db.session.add(r)
     db.session.commit()
     return jsonify(request_data)
@@ -45,7 +40,20 @@ def delete_report(report_id):
     report = Report.query.get(int(report_id))
     db.session.delete(report)
     db.session.commit()
-    return jsonpickle.encode(report)
+    return_report = {"report_id":report.report_id,"symptoms":report.symptoms,"date":report.date,"diagnosis":report.diagnosis,"patient_id":report.patient_id}
+    return jsonpickle.encode(return_report)
+
+@app.route("/update-report/<int:report_id>",methods=['POST'])
+def edit_report(report_id):
+    request_data = request.get_json()
+    report = Report.query.get(int(report_id))
+    report.symptoms = request_data["symptoms"]
+    report.date = request_data["date"]
+    report.diagnosis = request_data["diagnosis"]
+    report.patient_id = request_data["patient_id"]
+    db.session.commit()
+    return_report = {"report_id":report.report_id,"symptoms":report.symptoms,"date":report.date,"diagnosis":report.diagnosis,"patient_id":report.patient_id}
+    return jsonpickle.encode(return_report)
 
 db.create_all()
 
