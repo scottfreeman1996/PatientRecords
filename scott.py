@@ -75,10 +75,10 @@ def get_patient_by_patient_id(patient_id):
 
 @app.route('/patients/<int:patient_id>', methods = ['DELETE'])
 def delete_patient(patient_id):
-    patient_list = db.session.query(Patient).filter_by(patient_id=int(patient_id)).all()
-
-  
-    
+    patient = Patient.query.get(int(patient_id))
+    db.session.delete(patient)
+    db.session.commit()
+    return jsonpickle.encode(patient)
 
 
 
