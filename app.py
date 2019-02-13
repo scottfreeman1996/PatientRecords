@@ -6,4 +6,11 @@ from settings import *
 #__name__ returns module name for this file
 app = Flask(__name__)
 
+class Patient:
+    pass
+
+class Report:
+    pass
+
+
 app.run(port=5000)
