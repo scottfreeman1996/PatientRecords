@@ -39,7 +39,13 @@ def get_reports(patient_id):
     for report in report_list:
         display_report_list.append({"report_id":report.report_id,"symptoms":report.symptoms,"date":report.date,"diagnosis":report.diagnosis,"patient_id":report.patient_id})
     return jsonpickle.encode(display_report_list)
-    # return Report.query.filter_by("patient_id"==int(patient_id))
+
+@app.route("/delete-report/<int:report_id>",methods=['DELETE'])
+def delete_report(report_id):
+    report = Report.query.get(int(report_id))
+    db.session.delete(report)
+    db.session.commit()
+    return jsonpickle.encode(report)
 
 db.create_all()
 
