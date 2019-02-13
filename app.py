@@ -48,6 +48,10 @@ class Report(db.Model):
 
 db.create_all()
 
+@app.route('/')
+def application_home():
+    return 'Welcome to NHS Application'
+
 #Patient class http methods
 
 @app.route('/patients/register',methods=['POST'])
