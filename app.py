@@ -54,7 +54,7 @@ db.create_all()
 def create_Patient():
     p = Patient({"name":"Test Patient","gender":"male","date_of_birth":"01/01/2010",
                 "area":"Leeds","phone_no":67})
-    
+
     db.session.add(p)
     db.session.commit()
 
@@ -107,6 +107,9 @@ def add_report(patient_id):
     request_data = request.get_json()
     request_data["patient_id"] = int(patient_id)
     r = Report(**request_data)
+    
+    p.reports.append(r)
+
     db.session.add(r)
     db.session.commit()
     return jsonify(request_data)
