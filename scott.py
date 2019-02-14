@@ -172,7 +172,7 @@ def display_home_page():
 
 @app.route("/web/get-reports")
 def display_manager_page():
-    return render_template("manager.html", result=jsonpickle.decode(get_reports(1)), 
+    return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(1)), 
                            content_type="application/json")
 
 @app.route('/web/manager')
@@ -180,5 +180,12 @@ def display_patient_page_for_manager():
     return render_template("patient-list-manager.html", result=jsonpickle.decode(get_Patients()), 
                            content_type="application/json")
     
+
+@app.route("/web/manager/reports/<int:patient_id>")
+def display_reports_by_id(patient_id):
+    return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(int(patient_id)), 
+                           content_type="application/json"))
+
+
 
 app.run(port=5000)
