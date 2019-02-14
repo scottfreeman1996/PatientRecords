@@ -52,21 +52,21 @@ def application_home():
 #Patient class http methods
 
 @app.route('/patients/register',methods=['POST'])
-def create_Patient():
+def create_Patient(p):
+    patient = Patient(p)
+    # p = Patient({"name":"Test Patient","gender":"male","date_of_birth":"01/01/2010",
+    #             "area":"Leeds","phone_no":67})
 
-    p = Patient({"name":"Test Patient","gender":"male","date_of_birth":"01/01/2010",
-                "area":"Leeds","phone_no":67})
-
-    db.session.add(p)
+    db.session.add(patient)
     db.session.commit()
 
-    patients = Patient.query.all()
+    # patients = Patient.query.all()
 
-    for p in patients:
-        print("ID:",p.patient_id,"Name:",p.name,"Gender:",p.gender, "Date of Birth:",p.date_of_birth,
-            "Area:",p.area, "Phone Number:",p.phone_no)
+    # for p in patients:
+    #     print("ID:",p.patient_id,"Name:",p.name,"Gender:",p.gender, "Date of Birth:",p.date_of_birth,
+    #         "Area:",p.area, "Phone Number:",p.phone_no)
 
-    pass
+    # pass
     
     
 
@@ -150,13 +150,14 @@ def edit_report(report_id):
 
 @app.route('/web/patients/register', methods=["POST"])
 def register_patient_web():
-    create_Patient()
-    # {"patient_id":int(request.form.get("patient_id")),
-    #      "name":request.form.get("name"),
-    #      "gender":request.form.get("gender"),
-    #      "date_of_birth":request.form.get("date_of_birth"),
-    #      "area":request.form.get("area"),
-    #      "phone_no":int(request.form.get("phone_no"))}
+    
+    p={"patient_id":int(request.form.get("patient_id")),
+         "name":request.form.get("name"),
+         "gender":request.form.get("gender"),
+         "date_of_birth":request.form.get("date_of_birth"),
+         "area":request.form.get("area"),
+         "phone_no":int(request.form.get("phone_no"))}
+    create_Patient(p)
     return redirect("/web/patients") # redirects user to patient list
 
 @app.route('/web/patients')
@@ -172,6 +173,11 @@ def display_home_page():
 @app.route("/web/get-reports")
 def display_manager_page():
     return render_template("manager.html", result=jsonpickle.decode(get_reports(1)), 
+                           content_type="application/json")
+
+@app.route('/web/manager')
+def display_patient_page_for_manager():
+    return render_template("patient-list-manager.html", result=jsonpickle.decode(get_Patients()), 
                            content_type="application/json")
     
 
