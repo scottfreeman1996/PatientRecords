@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, Response
 import json
 import jsonpickle
 from mysql import connector
-from classes import db
+from classes import db, Report, Patient
 from area_api import area_blueprint
 
 app = Flask(__name__)
