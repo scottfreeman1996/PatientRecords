@@ -12,7 +12,7 @@ class Patient(db.Model):
     date_of_birth = db.Column("date_of_birth", db.String(10))
     area = db.Column("area", db.String(20))
     phone_no = db.Column("phone_no", db.Integer)
-    reports = db.relationship('report',backref='patient',lazy=True)
+    # reports = db.relationship('report',backref='patient',lazy=True)
     
     def __init__(self,params):
         self.name = params["name"]
@@ -31,4 +31,4 @@ class Report(db.Model):
     symptoms = db.Column(db.String(1000))
     date = db.Column(db.String(10))
     diagnosis = db.Column(db.String(50))
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient_details.patient_id'),nullable=False)
+    patient_id = db.Column(db.Integer)#, db.ForeignKey('patient_details.patient_id'),nullable=False)
