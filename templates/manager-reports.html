@@ -32,12 +32,12 @@
 			<td id="count" colspan="3">{{result|count}} : Reports Fetched</td>
 		</tr>
 	</table>
-	<form id="rep-reg-form" method="POST" action="./add-report/<int:patient_id>">
+	<form id="rep-reg-form" method="POST" action="">  
 	<table>
 		<tr>
 			<td><input name="date" placeholder="Date" id="date"></td>
-            <td><input name="diagnosis" placeholder="Diagnosis" id="diagnosis"></td>
-            <td><input name="patient_id" placeholder="Patient ID" id="patient_id"></td>
+			<td><input name="diagnosis" placeholder="Diagnosis" id="diagnosis"></td>
+            <!-- <td><input name="patient_id" placeholder="Patient ID" id="patient_id"></td> -->
 			<td><input name="mode" type="hidden" value="web"></td>
 			<td><input id="add-rep" type="submit" value="Add"></td>
 		</tr>
