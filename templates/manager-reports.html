@@ -3,6 +3,8 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<a href="http://localhost:5000/web/manager"><button>Back</button></a>
+
 <title>Welcome Manager</title>
 </head>
 <body>
@@ -28,10 +30,9 @@
 			<td id="count" colspan="3">{{result|count}} : Reports Fetched</td>
 		</tr>
 	</table>
-	<form id="rep-reg-form" method="POST" action="./patients/register">
+	<form id="rep-reg-form" method="POST" action="./add-report/<int:patient_id>">
 	<table>
 		<tr>
-			<td><input name="report_id" placeholder="Report ID" id="report_id"></td>
 			<td><input name="date" placeholder="Date" id="date"></td>
             <td><input name="diagnosis" placeholder="Diagnosis" id="diagnosis"></td>
             <td><input name="patient_id" placeholder="Patient ID" id="patient_id"></td>
