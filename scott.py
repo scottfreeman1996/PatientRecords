@@ -54,20 +54,9 @@ def application_home():
 @app.route('/patients/register',methods=['POST'])
 def create_Patient(p):
     patient = Patient(p)
-    # p = Patient({"name":"Test Patient","gender":"male","date_of_birth":"01/01/2010",
-    #             "area":"Leeds","phone_no":67})
 
     db.session.add(patient)
     db.session.commit()
-
-    # patients = Patient.query.all()
-
-    # for p in patients:
-    #     print("ID:",p.patient_id,"Name:",p.name,"Gender:",p.gender, "Date of Birth:",p.date_of_birth,
-    #         "Area:",p.area, "Phone Number:",p.phone_no)
-
-    # pass
-    
     
 
 
@@ -170,10 +159,6 @@ def display_home_page():
     return render_template("home.html", 
                            content_type="application/json")
 
-# @app.route("/web/get-reports")
-# def display_manager_page():
-#     return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(1)), 
-#                            content_type="application/json")
 
 @app.route('/web/manager')
 def display_patient_page_for_manager():
@@ -182,13 +167,27 @@ def display_patient_page_for_manager():
     
 
 
-#section of thins that don't work
-
 @app.route("/web/manager/reports/<int:patient_id>")
 def display_reports_by_id(patient_id):
     return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(int(patient_id))), 
                            content_type="application/json")
 
+
+#section of things that don't work
+
+
+@app.route("/web/manager/reports/add-report/<int:patient_id>",methods=['POST'])
+def add_report_to_patient(patient_id):
+
+    r={"patient_id":int(request.form.get("patient_id")),
+        "symptoms":request.form.get("symptoms"),
+        "date":request.form.get("date"),
+        "diagnosis":request.form.get("diagnosis")
+        }
+    
+    add_report(r)
+
+    return redirect("/web/manager/reports")
 
 @app.route("/web/manager/reports/delete",methods=['DELETE'])
 def delete_report_as_manager(report_id):
