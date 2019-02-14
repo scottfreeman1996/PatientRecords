@@ -78,6 +78,7 @@ def get_Patients():
     for patient in patient_list:
         display_patient_list.append({"patient_id":patient.patient_id,"name":patient.name,"gender":patient.gender,
         "date_of_birth":patient.date_of_birth,"area":patient.area,"phone_no":patient.phone_no})
+    print(display_patient_list)
     return jsonpickle.encode(display_patient_list)
 
 
@@ -144,20 +145,32 @@ def edit_report(report_id):
     return jsonpickle.encode(return_report)
 
 
+#html links
+
 @app.route('/web/patients/register', methods=["POST"])
 def register_patient_web():
     create_Patient(
-        Employee({"patient_id":int(request.form.get("patient_id")),
-                  "name":request.form.get("name"),
-                  "gender":request.form.get("gender"),
-                  "date_of_birth":request.form.get("date_of_birth"),
-                  "area":request.form.get("area"),
-                  "phone_no":request.form.get("phone_no"),}))
+        {"patient_id":int(request.form.get("patient_id")),
+         "name":request.form.get("name"),
+         "gender":request.form.get("gender"),
+         "date_of_birth":request.form.get("date_of_birth"),
+         "area":request.form.get("area"),
+         "phone_no":request.form.get("phone_no")})
     return redirect("/web/patients") # redirects user to patient list
 
 @app.route('/web/patients')
 def display_patient_page():
-    return render_template("patient.html", result=get_Patients(), 
+    return render_template("patient.html", result=jsonpickle.decode(get_Patients()), 
+                           content_type="application/json")
+
+@app.route('/web/')
+def display_home_page():
+    return render_template("home.html", 
+                           content_type="application/json")
+
+@app.route("/web/get-reports")
+def display_manager_page():
+    return render_template("manager.html", result=get_reports(1), 
                            content_type="application/json")
     
 
