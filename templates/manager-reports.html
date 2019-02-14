@@ -23,7 +23,9 @@
 				<td>{{rep['report_id']}}</td>
 				<td>{{rep.date}}</td>
                 <td>{{rep.diagnosis}}</td>
-                <td>{{rep.patient_id}}</td>
+				<td>{{rep.patient_id}}</td>
+				<td><button method="DELETE" action="./manager/reports/delete">Delete</button></td>
+				<td><button method="POST" action="./manager/reports/edit">Edit</button></td>
 			</tr>
 		{%endfor%}
 		<tr>

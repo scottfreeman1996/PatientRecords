@@ -170,10 +170,10 @@ def display_home_page():
     return render_template("home.html", 
                            content_type="application/json")
 
-@app.route("/web/get-reports")
-def display_manager_page():
-    return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(1)), 
-                           content_type="application/json")
+# @app.route("/web/get-reports")
+# def display_manager_page():
+#     return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(1)), 
+#                            content_type="application/json")
 
 @app.route('/web/manager')
 def display_patient_page_for_manager():
@@ -181,10 +181,24 @@ def display_patient_page_for_manager():
                            content_type="application/json")
     
 
+
+#section of thins that don't work
+
 @app.route("/web/manager/reports/<int:patient_id>")
 def display_reports_by_id(patient_id):
-    return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(int(patient_id)), 
-                           content_type="application/json"))
+    return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(int(patient_id))), 
+                           content_type="application/json")
+
+
+@app.route("/web/manager/reports/delete",methods=['DELETE'])
+def delete_report_as_manager(report_id):
+    delete_report(report_id)
+    return redirect("/web/manager/reports")
+
+
+# @app.route("/web/manager/reports/edit",methods=['POST'])
+# def edit_report_as_manager(report_id):
+
 
 
 

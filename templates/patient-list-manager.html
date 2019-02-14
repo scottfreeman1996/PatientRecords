@@ -27,7 +27,7 @@
                 <td>{{pat.date_of_birth}}</td>
                 <td>{{pat.area}}</td>
                 <td>{{pat.phone_no}}</td>
-                <td> <a href="/web/manager/reports/<int:patient_id>" ><button (click) = display_report({{pat.patient_id}})>Reports</button></a></td>
+                <td> <a href="manager/reports/{{pat.patient_id}}" ><button>Reports</button></a></td>
 			</tr>
 		{%endfor%}
 		<tr>
