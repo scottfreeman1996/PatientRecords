@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Patient Information</title>
+</head>
+<body>
+	<h1>Patient Information</h1>
+	{% if result %}
+	
+	<table border = "1">
+		<tr>
+			<th>Patient ID</th>
+			<th>Name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Area</th>
+            <th>Phone Number</th>
+		</tr>
+		{% for pat in result %}
+			<tr>
+				<td>{{pat['patient_id']}}</td>
+				<td>{{pat.name}}</td>
+                <td>{{pat.gender}}</td>
+                <td>{{pat.date_of_birth}}</td>
+                <td>{{pat.area}}</td>
+                <td>{{pat.phone_no}}</td>
+                <td><button href="">Reports</button></td>
+			</tr>
+		{%endfor%}
+		<tr>
+			<td id="count" colspan="3">{{result|count}} : Patients Fetched</td>
+		</tr>
+	</table>
+	{%endif%} <!-- don't put space between words -->
+</body>
+</html>
