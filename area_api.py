@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 import jsonpickle
 from classes import db, Patient, Report
@@ -40,6 +40,9 @@ def area_reports():
             key_values[keys[i]] = values[i]
         counter_by_area.append({"area":object["area"],"total":length,"diagnosis_count":key_values})
 
+    return jsonpickle.encode(counter_by_area)
 
-
-    return jsonify(counter_by_area)
+@area_blueprint.route('/')
+def render_reports():
+    return render_template("area-reports.html", result=jsonpickle.decode(area_reports()), 
+                           content_type="application/json")

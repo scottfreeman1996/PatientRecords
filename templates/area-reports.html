@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+
+<title>Area Reports</title>
+</head>
+<body>
+<h1>Area Reports</h1>
+
+{% if result %}
+{% for obj in result %}
+    <h1>{{obj['area']}}</h1>
+
+    </br>
+
+    <div>The diagnoses in descending order are below:</div>
+
+    </br>
+
+    
+    <table border = "1">
+        <tr>
+            <th>Diagnosis</th>
+            <th>Number of patients</th>
+        </tr>
+        {%for diagnosis in obj['diagnosis_count'] %}
+        <tr>
+            <td>{{diagnosis}}</td>
+            <td>{{obj['diagnosis_count'][diagnosis]}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+
+    </br>
+
+    <div>The total number of patients is {{obj['total']}}.</div>
+    
+{%endfor%}
+{%endif%} <!-- don't put space between words -->
+</body>
+</html>
