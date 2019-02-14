@@ -18,7 +18,7 @@
 		</tr>
 		{% for rep in result %}
 			<tr>
-				<td>{{rep.report_id}}</td>
+				<td>{{rep['report_id']}}</td>
 				<td>{{rep.date}}</td>
                 <td>{{rep.diagnosis}}</td>
                 <td>{{rep.patient_id}}</td>
@@ -31,14 +31,12 @@
 	<form id="rep-reg-form" method="POST" action="./patients/register">
 	<table>
 		<tr>
-			<td><input name="patient_id" placeholder="ID" id="patient_id"></td>
-			<td><input name="name" placeholder="Name" id="name"></td>
-            <td><input name="gender" placeholder="Gender" id="gender"></td>
-            <td><input name="date_of_birth" placeholder="Date of Birth" id="date_of_birth"></td>
-            <td><input name="area" placeholder="Area" id="area"></td>
-            <td><input name="phone_no" placeholder="Phone Number" id="phone_no"></td>
+			<td><input name="report_id" placeholder="Report ID" id="report_id"></td>
+			<td><input name="date" placeholder="Date" id="date"></td>
+            <td><input name="diagnosis" placeholder="Diagnosis" id="diagnosis"></td>
+            <td><input name="patient_id" placeholder="Patient ID" id="patient_id"></td>
 			<td><input name="mode" type="hidden" value="web"></td>
-			<td><input id="add-emp" type="submit" value="Add"></td>
+			<td><input id="add-rep" type="submit" value="Add"></td>
 		</tr>
 	</table>
 	</form>

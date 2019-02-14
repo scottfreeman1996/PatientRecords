@@ -53,6 +53,7 @@ def application_home():
 
 @app.route('/patients/register',methods=['POST'])
 def create_Patient():
+
     p = Patient({"name":"Test Patient","gender":"male","date_of_birth":"01/01/2010",
                 "area":"Leeds","phone_no":67})
 
@@ -78,7 +79,7 @@ def get_Patients():
     for patient in patient_list:
         display_patient_list.append({"patient_id":patient.patient_id,"name":patient.name,"gender":patient.gender,
         "date_of_birth":patient.date_of_birth,"area":patient.area,"phone_no":patient.phone_no})
-    print(display_patient_list)
+    #print(display_patient_list)
     return jsonpickle.encode(display_patient_list)
 
 
@@ -149,13 +150,13 @@ def edit_report(report_id):
 
 @app.route('/web/patients/register', methods=["POST"])
 def register_patient_web():
-    create_Patient(
-        {"patient_id":int(request.form.get("patient_id")),
-         "name":request.form.get("name"),
-         "gender":request.form.get("gender"),
-         "date_of_birth":request.form.get("date_of_birth"),
-         "area":request.form.get("area"),
-         "phone_no":request.form.get("phone_no")})
+    create_Patient()
+    # {"patient_id":int(request.form.get("patient_id")),
+    #      "name":request.form.get("name"),
+    #      "gender":request.form.get("gender"),
+    #      "date_of_birth":request.form.get("date_of_birth"),
+    #      "area":request.form.get("area"),
+    #      "phone_no":int(request.form.get("phone_no"))}
     return redirect("/web/patients") # redirects user to patient list
 
 @app.route('/web/patients')
@@ -170,7 +171,7 @@ def display_home_page():
 
 @app.route("/web/get-reports")
 def display_manager_page():
-    return render_template("manager.html", result=get_reports(1), 
+    return render_template("manager.html", result=jsonpickle.decode(get_reports(1)), 
                            content_type="application/json")
     
 
