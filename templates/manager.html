@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Welcome Manager</title>
+</head>
+<body>
+	<h1>Report Information</h1>
+	{% if result %}
+	
+	<table border = "1">
+		<tr>
+			<th>Report ID</th>
+			<th>Date</th>
+            <th>Diagnosis</th>
+            <th>Patient ID</th>
+		</tr>
+		{% for rep in result %}
+			<tr>
+				<td>{{rep.report_id}}</td>
+				<td>{{rep.date}}</td>
+                <td>{{rep.diagnosis}}</td>
+                <td>{{rep.patient_id}}</td>
+			</tr>
+		{%endfor%}
+		<tr>
+			<td id="count" colspan="3">{{result|count}} : Reports Fetched</td>
+		</tr>
+	</table>
+	<form id="rep-reg-form" method="POST" action="./patients/register">
+	<table>
+		<tr>
+			<td><input name="patient_id" placeholder="ID" id="patient_id"></td>
+			<td><input name="name" placeholder="Name" id="name"></td>
+            <td><input name="gender" placeholder="Gender" id="gender"></td>
+            <td><input name="date_of_birth" placeholder="Date of Birth" id="date_of_birth"></td>
+            <td><input name="area" placeholder="Area" id="area"></td>
+            <td><input name="phone_no" placeholder="Phone Number" id="phone_no"></td>
+			<td><input name="mode" type="hidden" value="web"></td>
+			<td><input id="add-emp" type="submit" value="Add"></td>
+		</tr>
+	</table>
+	</form>
+	{%endif%} <!-- don't put space between words -->
+</body>
+</html>
