@@ -21,6 +21,7 @@ def create_Patient(p):
 
     db.session.add(patient)
     db.session.commit()
+    return jsonpickle.encode(patient)
     
 
 
@@ -58,17 +59,13 @@ def delete_patient(patient_id):
 
 #Report class http methods
 
-@main_blueprint.route("/add-report/<int:patient_id>",methods=['POST'])
-def add_report(patient_id):
-    request_data = request.get_json()
-    request_data["patient_id"] = int(patient_id)
-    r = Report(**request_data)
-    
-    p.reports.append(r)
+@main_blueprint.route("/add-report/",methods=['POST'])
+def add_report(r):
+    report = Report(r)
 
-    db.session.add(r)
+    db.session.add(report)
     db.session.commit()
-    return jsonify(request_data)
+    return jsonify(report)
 
 @main_blueprint.route("/get-reports/<int:patient_id>")
 def get_reports(patient_id):
@@ -143,7 +140,7 @@ def display_reports_by_id(patient_id):
 @main_blueprint.route("/web/manager/reports/add-report/<int:patient_id>",methods=['POST'])
 def add_report_to_patient(patient_id):
 
-    r={"patient_id":int(request.form.get("patient_id")),
+    r={"patient_id":int(patient_id),
         "symptoms":request.form.get("symptoms"),
         "date":request.form.get("date"),
         "diagnosis":request.form.get("diagnosis")

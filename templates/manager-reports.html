@@ -14,25 +14,27 @@
 	<table border = "1">
 		<tr>
 			<th>Report ID</th>
+			<th>Patient ID</th>
 			<th>Date</th>
+			<th>Symptoms</th>
             <th>Diagnosis</th>
-            <th>Patient ID</th>
 		</tr>
 		{% for rep in result %}
 			<tr>
 				<td>{{rep['report_id']}}</td>
-				<td>{{rep.date}}</td>
-                <td>{{rep.diagnosis}}</td>
 				<td>{{rep.patient_id}}</td>
+				<td>{{rep.date}}</td>
+				<td>{{rep.symptoms}}</td>
+				<td>{{rep.diagnosis}}</td>
 				<td><button method="DELETE" action="./manager/reports/delete">Delete</button></td>
 				<td><button method="POST" action="./manager/reports/edit">Edit</button></td>
 			</tr>
 		{%endfor%}
 		<tr>
-			<td id="count" colspan="3">{{result|count}} : Reports Fetched</td>
+			<td id="count" colspan="3">{{result|count}} reports Fetched</td>
 		</tr>
 	</table>
-	<form id="rep-reg-form" method="POST" action="">  
+	<form id="rep-reg-form" method="POST" action="/web/manager/reports/add-report/{{result[0]['patient_id']}}">  
 	<table>
 		<tr>
 			<td><input name="date" placeholder="Date" id="date"></td>
