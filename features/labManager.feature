@@ -7,3 +7,4 @@ Scenario: Get the Patient list from DB as a Lab Manager
 Scenario: Get the Patient Count
     Given Request for Patients
     Then Able to fetch the Patient Count
+    
