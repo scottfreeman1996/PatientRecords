@@ -4,7 +4,7 @@ import jsonpickle
 from classes import db, Patient, Report
 from collections import Counter
 
-area_blueprint = Blueprint('area_report', __name__, url_prefix='/area_report')
+area_blueprint = Blueprint('area_report', __name__, url_prefix='/')
 
 @area_blueprint.route('/show_areas')
 def area_reports():
@@ -42,7 +42,7 @@ def area_reports():
 
     return jsonpickle.encode(counter_by_area)
 
-@area_blueprint.route('/')
+@area_blueprint.route('/web/area_reports')
 def render_reports():
     return render_template("area-reports.html", result=jsonpickle.decode(area_reports()), 
                            content_type="application/json")
