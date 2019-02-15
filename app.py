@@ -4,9 +4,11 @@ import jsonpickle
 from mysql import connector
 from classes import db, Report, Patient
 from area_api import area_blueprint
+from main_api import main_blueprint
 
 app = Flask(__name__)
 app.register_blueprint(area_blueprint)
+app.register_blueprint(main_blueprint)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/patient_records'
 

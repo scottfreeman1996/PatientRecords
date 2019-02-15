@@ -1,28 +1,21 @@
-from flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request, Response, Blueprint
 import json
 from flask_sqlalchemy import SQLAlchemy
 import jsonpickle
 from mysql import connector
 from flask.templating import render_template
 from werkzeug.utils import redirect
-from classes import db,Patient, Report
+from classes import db, Patient, Report
 
-app = Flask(__name__)
+main_blueprint = Blueprint('main',__name__, url_prefix='/')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/patient_records'
-db = SQLAlchemy(app)
-
-#classes
-
-db.create_all()
-
-@app.route('/')
+@main_blueprint.route('/')
 def application_home():
     return 'Welcome to NHS Application'
 
 #Patient class http methods
 
-@app.route('/patients/register',methods=['POST'])
+@main_blueprint.route('/patients/register',methods=['POST'])
 def create_Patient(p):
     patient = Patient(p)
 
@@ -31,7 +24,7 @@ def create_Patient(p):
     
 
 
-@app.route('/patients/list')
+@main_blueprint.route('/patients/list')
 def get_Patients():
     
     patient_list = db.session.query(Patient).all()
@@ -44,7 +37,7 @@ def get_Patients():
 
 
 
-@app.route('/patients/<int:patient_id>')
+@main_blueprint.route('/patients/<int:patient_id>')
 def get_patient_by_patient_id(patient_id):
 
     patient_list = db.session.query(Patient).filter_by(patient_id=int(patient_id)).all()
@@ -56,7 +49,7 @@ def get_patient_by_patient_id(patient_id):
     return jsonpickle.encode(display_patient_list)
 
 
-@app.route('/patients/<int:patient_id>', methods = ['DELETE'])
+@main_blueprint.route('/patients/<int:patient_id>', methods = ['DELETE'])
 def delete_patient(patient_id):
     patient = Patient.query.get(int(patient_id))
     db.session.delete(patient)
@@ -65,7 +58,7 @@ def delete_patient(patient_id):
 
 #Report class http methods
 
-@app.route("/add-report/<int:patient_id>",methods=['POST'])
+@main_blueprint.route("/add-report/<int:patient_id>",methods=['POST'])
 def add_report(patient_id):
     request_data = request.get_json()
     request_data["patient_id"] = int(patient_id)
@@ -77,7 +70,7 @@ def add_report(patient_id):
     db.session.commit()
     return jsonify(request_data)
 
-@app.route("/get-reports/<int:patient_id>")
+@main_blueprint.route("/get-reports/<int:patient_id>")
 def get_reports(patient_id):
     report_list = db.session.query(Report).filter_by(patient_id=int(patient_id)).all()
     display_report_list = []
@@ -85,7 +78,7 @@ def get_reports(patient_id):
         display_report_list.append({"report_id":report.report_id,"symptoms":report.symptoms,"date":report.date,"diagnosis":report.diagnosis,"patient_id":report.patient_id})
     return jsonpickle.encode(display_report_list)
 
-@app.route("/delete-report/<int:report_id>",methods=['DELETE'])
+@main_blueprint.route("/delete-report/<int:report_id>",methods=['DELETE'])
 def delete_report(report_id):
     report = Report.query.get(int(report_id))
     db.session.delete(report)
@@ -93,7 +86,7 @@ def delete_report(report_id):
     return_report = {"report_id":report.report_id,"symptoms":report.symptoms,"date":report.date,"diagnosis":report.diagnosis,"patient_id":report.patient_id}
     return jsonpickle.encode(return_report)
 
-@app.route("/update-report/<int:report_id>",methods=['POST'])
+@main_blueprint.route("/update-report/<int:report_id>",methods=['POST'])
 def edit_report(report_id):
     request_data = request.get_json()
     report = Report.query.get(int(report_id))
@@ -108,7 +101,7 @@ def edit_report(report_id):
 
 #html links
 
-@app.route('/web/patients/register', methods=["POST"])
+@main_blueprint.route('/web/patients/register', methods=["POST"])
 def register_patient_web():
     
     p={"patient_id":int(request.form.get("patient_id")),
@@ -120,25 +113,25 @@ def register_patient_web():
     create_Patient(p)
     return redirect("/web/patients") # redirects user to patient list
 
-@app.route('/web/patients')
+@main_blueprint.route('/web/patients')
 def display_patient_page():
     return render_template("patient.html", result=jsonpickle.decode(get_Patients()), 
                            content_type="application/json")
 
-@app.route('/web/')
+@main_blueprint.route('/web/')
 def display_home_page():
     return render_template("home.html", 
                            content_type="application/json")
 
 
-@app.route('/web/manager')
+@main_blueprint.route('/web/manager')
 def display_patient_page_for_manager():
     return render_template("patient-list-manager.html", result=jsonpickle.decode(get_Patients()), 
                            content_type="application/json")
     
 
 
-@app.route("/web/manager/reports/<int:patient_id>")
+@main_blueprint.route("/web/manager/reports/<int:patient_id>")
 def display_reports_by_id(patient_id):
     return render_template("manager-reports.html", result=jsonpickle.decode(get_reports(int(patient_id))), 
                            content_type="application/json")
@@ -147,7 +140,7 @@ def display_reports_by_id(patient_id):
 #section of things that don't work
 
 
-@app.route("/web/manager/reports/add-report/<int:patient_id>",methods=['POST'])
+@main_blueprint.route("/web/manager/reports/add-report/<int:patient_id>",methods=['POST'])
 def add_report_to_patient(patient_id):
 
     r={"patient_id":int(request.form.get("patient_id")),
@@ -160,7 +153,7 @@ def add_report_to_patient(patient_id):
 
     return redirect("/web/manager/reports")
 
-@app.route("/web/manager/reports/delete",methods=['DELETE'])
+@main_blueprint.route("/web/manager/reports/delete",methods=['DELETE'])
 def delete_report_as_manager(report_id):
     delete_report(report_id)
     return redirect("/web/manager/reports")
@@ -168,8 +161,3 @@ def delete_report_as_manager(report_id):
 
 # @app.route("/web/manager/reports/edit",methods=['POST'])
 # def edit_report_as_manager(report_id):
-
-
-
-
-app.run(port=5000)
