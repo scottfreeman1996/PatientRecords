@@ -29,7 +29,7 @@ def area_reports():
             q = db.session.query(Report.diagnosis).filter_by(patient_id=id).all()
             for diagnosis in q:
                 diagnoses_by_id.append(diagnosis[0])
-        diagnoses_by_area.append({"area":dict["area"],"diagnoses":diagnoses_by_id})
+        diagnoses_by_area.append({"area":dict["area"],"diagnoses":diagnoses_by_id,"patient_ids":dict["patient_ids"]})
         
     for object in diagnoses_by_area:
         keys = list(Counter(object["diagnoses"]).keys())
@@ -38,7 +38,7 @@ def area_reports():
         key_values = {}
         for i in range(len(keys)):
             key_values[keys[i]] = values[i]
-        counter_by_area.append({"area":object["area"],"total":length,"diagnosis_count":key_values})
+        counter_by_area.append({"area":object["area"],"total":len(object["patient_ids"]),"diagnosis_count":key_values})
 
     return jsonpickle.encode(counter_by_area)
 
